@@ -1,0 +1,31 @@
+.vending-machine {
+  border: 3px solid grey;
+  border-radius: 10px;
+}
+
+.snack-image {
+  height: 150px;
+}
+
+.selected-snacks {
+  min-height: 370px;
+  background-color: grey;
+}
+
+.ui.grid>.row {
+  justify-content: space-around;
+}
+
+.snack-card {
+  padding: 10px 20px;
+  border: 1px solid grey;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  & h3 {
+    width: 100px;
+  }
+}
+
+.row {
+  margin-top: 30px;
+}
