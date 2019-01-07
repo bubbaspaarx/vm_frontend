@@ -10,10 +10,10 @@ export default class VendingMachine extends Component {
   }
 
   componentDidMount() {
-    return fetch(`http://localhost:3000/api/v1/machines/1/snacks/`)
+    return fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/snacks/`)
       .then(resp => resp.json())
       .then(data => this.setState({snacks: data.data}))
-      .then(fetch(`http://localhost:3000/api/v1/machines/1/money`)
+      .then(fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/money`)
         .then(resp => resp.json())
         .then(data => this.setState({denominations: data.data})))
   }
@@ -22,7 +22,7 @@ export default class VendingMachine extends Component {
   restockCash = (denom) => {
     const { denominations } = this.state
     denom.attributes.quantity = 100
-    return fetch(`http://localhost:3000/api/v1/machines/1/money/${denom.id}`, {
+    return fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/money/${denom.id}`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
@@ -42,7 +42,7 @@ export default class VendingMachine extends Component {
     const { snacks } = this.state
     snack.attributes.quantity = 20
     console.log('restock me!!!', snack)
-    return fetch(`http://localhost:3000/api/v1/machines/1/snacks/${snack.id}/`, {
+    return fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/snacks/${snack.id}/`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
