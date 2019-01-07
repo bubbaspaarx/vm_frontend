@@ -11,7 +11,7 @@ export default class SelectedSnacks extends React.Component {
           <div className="ui five column grid">
             <div className="row ">
               {snacks.map(snack =>
-                <div key={snack.attributes.name} className="snack-card">
+                <div key={`${snack.attributes.name+snack.keyNum}`} className="snack-card">
                   <SnackCard snack={snack} removeSnack={removeSnack}/>
                   <button className="ui inverted basic button" onClick={() => removeSnack(snack)}>Deselect</button>
                 </div>

@@ -5,14 +5,14 @@ import SnackCard from '../components/SnackCard'
 export default class Snacks extends React.Component {
 
 render() {
-  const { snacks, addSnack } = this.props
+  const { snacks, restockSnack } = this.props
   return(
   <div className="ui four column grid snacks">
     <div className="row">
       {snacks.map(snack =>
         <div key={snack.id} className="snack-card">
           <SnackCard snack={snack}/>
-          <button className="ui positive basic button" onClick={() => addSnack(snack)}>Select</button>
+          <button className="ui positive basic button" onClick={() => restockSnack(snack)}>Restock</button>
         </div>
         )
       }

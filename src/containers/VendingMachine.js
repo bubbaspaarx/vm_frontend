@@ -9,6 +9,7 @@ export default class VendingMachine extends Component {
     selectedSnacks: [],
     denominations: [],
     insertedCoins: [],
+    change: [],
     total: 0,
     paid: 0
   }
@@ -24,15 +25,18 @@ export default class VendingMachine extends Component {
 
   addSnack = (snack) => {
     let {selectedSnacks, total} = this.state
-    selectedSnacks = [...selectedSnacks, snack]
-    total = total + snack.attributes.price
+    const newSnack = JSON.parse(JSON.stringify(snack))
+    newSnack.keyNum = selectedSnacks.length
+    console.log(newSnack.keyNum)
+    total = total + newSnack.attributes.price
+    selectedSnacks = [...selectedSnacks, newSnack]
     this.setState({selectedSnacks, total }, () => console.log(this.state))
   }
 
   removeSnack = (snack) => {
     let {selectedSnacks, total} = this.state
     total = total -= snack.attributes.price
-    selectedSnacks = selectedSnacks.filter(sSnack => sSnack !== snack)
+    selectedSnacks = selectedSnacks.filter(sSnack => sSnack.keyNum !== snack.keyNum)
     this.setState({selectedSnacks, total})
   }
 
@@ -44,12 +48,49 @@ export default class VendingMachine extends Component {
   }
 
   buySnacks = () => {
-    let {selectedSnacks, denominations, paid, total} = this.state
-    fetch(`http://localhost:3000/api/v1/machines/1/snacks/`)
+    let {selectedSnacks, insertedCoins, paid, total, denominations} = this.state
+    fetch(`http://localhost:3000/api/v1/machines/1`, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        selectedSnacks,
+        insertedCoins,
+        paid,
+        total
+      })
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      console.log(data)
+      const change = []
+      for(const val in data.change){
+        let coin = denominations.find(d => d.attributes.value === Number(val))
+        coin = coin.attributes.denomination
+        change.push({denomination: coin, value: data.change[val]})
+      }
+      const snacks = data.snacks.map(sn => {
+        return {id: sn.id, attributes: {
+          name: sn.name,
+          image: sn.image,
+          price: sn.price,
+          quantity: sn.quantity
+        }}
+      })
+      this.setState({change, snacks})
+    })
   }
 
+  // renderCoins = (change) =>{
+  //   for(const coin in change){
+  //     return <li>{coin}: x {change[coin]}</li>
+  //   }
+  // }
+
   render(){
-    const { snacks, selectedSnacks, total, denominations, paid } = this.state
+    const { snacks, selectedSnacks, total, denominations, paid, change } = this.state
     const { addSnack, removeSnack, insertCash, buySnacks } = this
     return (
       <div className="vending-machine">
@@ -57,14 +98,23 @@ export default class VendingMachine extends Component {
         <div className="price">
           <h1>Total: £{Number(total / 100).toFixed(2)}</h1>
           <h1>Money Paid: £{Number(paid / 100).toFixed(2)}</h1>
-          {denominations.map(d =>
+          {paid < total || total === 0 ? denominations.map(d =>
             <button key={d.id} onClick={() => insertCash(d)}>{d.attributes.denomination}</button>
-          )}
+          ) : null}
         </div>
         {paid >= total && selectedSnacks.length > 0 ?
                <button className="ui primary button" onClick={() => buySnacks()}>Buy Snacks</button> : null}
         {selectedSnacks.length > 0 && paid < total ?
-               <p>Please insert £{Number((total - paid) / 100).toFixed(2)} more</p> : <p>Change due £{Number((paid - total) / 100).toFixed(2)}</p>}
+               <p>Please insert £{Number((total - paid) / 100).toFixed(2)} more</p> :
+               <div>
+                 <p>Change due £{Number((paid - total) / 100).toFixed(2)}</p>
+                 <ul style={{ listStyleType: "none" }}>
+                  {change ? change.map(coin => {
+                     return <li key={coin.denomination}>{coin.denomination} x {coin.value}</li>
+                  }) : null}
+                 </ul>
+               </div>
+             }
         <Snacks snacks={snacks} addSnack={addSnack}/>
       </div>
     )
