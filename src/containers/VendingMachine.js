@@ -15,22 +15,23 @@ export default class VendingMachine extends Component {
   }
 
   componentDidMount() {
-    return fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/snacks/`)
+    return fetch(`https://vm-cleo-frontend.herokuapp.com//api/v1/machines/1/snacks/`)
       .then(resp => resp.json())
       .then(data => this.setState({snacks: data.data}))
-      .then(fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1/money`)
+      .then(fetch(`https://vm-cleo-frontend.herokuapp.com//api/v1/machines/1/money`)
         .then(resp => resp.json())
         .then(data => this.setState({denominations: data.data})))
   }
 
   addSnack = (snack) => {
-    let {selectedSnacks, total} = this.state
+    let {selectedSnacks, total, change} = this.state
     const newSnack = JSON.parse(JSON.stringify(snack))
     newSnack.keyNum = selectedSnacks.length
     console.log(newSnack.keyNum)
+    change = []
     total = total + newSnack.attributes.price
     selectedSnacks = [...selectedSnacks, newSnack]
-    this.setState({selectedSnacks, total }, () => console.log(this.state))
+    this.setState({selectedSnacks, total, change }, () => console.log(this.state))
   }
 
   removeSnack = (snack) => {
@@ -49,7 +50,7 @@ export default class VendingMachine extends Component {
 
   buySnacks = () => {
     let {selectedSnacks, insertedCoins, paid, total, denominations} = this.state
-    fetch(`https://vm-cleo-backend.herokuapp.com/api/v1/machines/1`, {
+    fetch(`https://vm-cleo-frontend.herokuapp.com//api/v1/machines/1`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
@@ -79,7 +80,10 @@ export default class VendingMachine extends Component {
           quantity: sn.quantity
         }}
       })
-      this.setState({change, snacks})
+      const selectedSnacks = []
+      const paid = 0
+      const total = 0
+      this.setState({change, snacks, selectedSnacks, paid, total})
     })
   }
 
