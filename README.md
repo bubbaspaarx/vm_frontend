@@ -1,68 +1,20 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Vending Machine Challenge
 
-## Available Scripts
+# Front End
+The challenge didn't require the building of a front end like this but it was fun to do.
 
-In the project directory, you can run:
+At the top there are two links. the first will be the vending machine where you can add snacks to a basket and add different denominations of coins to pay for the goods. If you don't add enough money, you can't buy the goods. If you add too much, you will be given back some change depending on what the algorithm in the backend decides.
 
-### `npm start`
+Part of the challenge was to restock the vending machine. This can be done by selecting the 'restock link' at the top of page. All coins will be retocked to 100 coins, even if they are already over 100.. like someone taking out the earnings from the machine. The snacks will all be restocked to 20 snacks.
 
-Runs the app in the development mode.<br>
-Open [https://vm-cleo-backend.herokuapp.com](https://vm-cleo-backend.herokuapp.com) to view it in the browser.
+# Back End
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+The parameters of this challenge was to build a Ruby vending machine that has a stock of snacks and coins that could be restocked. It would ask you for more money if the snacks being purchased wasn't enough and the give you change when you put too much in.
 
-### `npm test`
+Instead of building a simple CLI for this challenge, I thought I would build a rails API and React front end as I thought it would be fun to make an actual project that functioned and looked like a vending machine. The hardest part of the challenge was implementing a good algorithm for returning the change. Simply returning a figure of the amount paid minus the total of the snacks bought would not be enough, it would require an algorithm that chose specific denominations to be returned to the user.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+As this challenge is used quite a lot for code challenges, there is a wealth of information and ways of implementing this part... however, pretty much all the attempts I found used a method of returning the lowest amount of coins possible to the user. Whilst this would be a better user experience (receiving a £1 coin and a 50p coin for £1.50 of change) we all know that vending machines inavriably don't do this.
 
-### `npm run build`
+My algorithm here worked on a principal of checking which coins had the highest amount of stock and checking if that coin would evenly go into the amount of change required.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+There are some improvements I would like to have implemented but didn't have time to do. Namely the main one of putting seperating out the actions that the Machine Controller was doing. I should have used multiple endpoints and controllers for the each transaction. I will change this going forward.
