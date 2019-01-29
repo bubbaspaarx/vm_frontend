@@ -15,10 +15,13 @@ export default class VendingMachine extends Component {
   }
 
   componentDidMount() {
-    return fetch(`https://vm-cleo-backend.herokuapp.com//api/v1/machines/1/snacks/`)
+    // return fetch(`https://vm-cleo-backend.herokuapp.com//api/v1/machines/1/snacks/`)
+    return fetch(`http://localhost:3000/api/v1/machines/1/snacks`)
       .then(resp => resp.json())
       .then(data => this.setState({snacks: data.data}))
-      .then(fetch(`https://vm-cleo-backend.herokuapp.com//api/v1/machines/1/money`)
+      .then(
+        // fetch(`https://vm-cleo-backend.herokuapp.com//api/v1/machines/1/money`)
+        fetch(`http://localhost:3000/api/v1/machines/1/money`)
         .then(resp => resp.json())
         .then(data => this.setState({denominations: data.data})))
   }
